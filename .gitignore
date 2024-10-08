@@ -1,0 +1,13 @@
+code/locations
+code/sniffers
+code/venv
+code/analysis
+code/*.pcap
+analysis/*.pdf
+*__pycache__
+*.ini
+*.ipynb_checkpoints
+*.vscode
+captures
+tools
+*.DS_Store
