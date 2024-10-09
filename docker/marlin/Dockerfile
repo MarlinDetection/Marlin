@@ -31,7 +31,7 @@ WORKDIR      /
 RUN apt-get install -y build-essential git cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libsctp-dev
 
 # Download LTESniffer dependencies
-RUN apt-get install -y libglib2.0-dev libudev-dev libcurl4-gnutls-dev libboost-all-dev qtdeclarative5-dev libqt5charts5-dev python3.10-venv
+RUN apt-get install -y libglib2.0-dev libudev-dev libcurl4-gnutls-dev libboost-all-dev qtdeclarative5-dev libqt5charts5-dev 
 
 # Build LTESniffer from source
 RUN git clone https://github.com/SysSec-KAIST/LTESniffer.git
@@ -46,13 +46,15 @@ RUN	make -j $MAKEWIDTH
 RUN cd $HOME
 WORKDIR /
 
+# Download Marlin dependencies
+RUN apt-get install -y python3-pip python3.10-venv
+
 # Get Marlin code
 RUN git clone https://github.com/MarlinDetection/Marlin
 RUN cd Marlin/code
 WORKDIR /Marlin/code
-# RUN	python3 -m venv ./venv
-# RUN source ./venv/bin/activate
-RUN apt-get install -y python3-pip
+RUN	python3 -m venv ./venv
+RUN /bin/bash -c 'source ./venv/bin/activate'
 RUN	python3 -m pip install -r requirements.txt
 
 # Enable USB passthrough
