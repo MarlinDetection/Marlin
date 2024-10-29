@@ -36,4 +36,4 @@ def calculate_ratios(connections_folder):
                     ratios.append(ratio)
             print(f'{file_dict[file]}: {np.mean(ratios)*100}%')
 
-calculate_ratios(Path('../data/lab-experiments'))
+calculate_ratios(Path('../../data/lab-experiments'))

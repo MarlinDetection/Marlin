@@ -11,7 +11,7 @@ import pandas as pd
 from pathlib import Path
 
 # Top level directory for your data
-data_directory = Path('../data')
+data_directory = Path('../../data')
 
 # Function to plot capture results on a 24 hour scale
 def plot_lte_data(connections_folder, label_dict, color_dict, fig_file_path, title):
@@ -32,7 +32,7 @@ def plot_lte_data(connections_folder, label_dict, color_dict, fig_file_path, tit
         xlabel='Time of Day',
         ylim=(0,.5),
         yticks=yticks_ratios,
-        yticklabels=['{:.0%}'.format(my_yticklabel).replace('%', r'\%') for my_yticklabel in yticks_ratios],
+        yticklabels=['{:.0%}'.format(my_yticklabel) for my_yticklabel in yticks_ratios],
         ylabel='IE Ratio')
     total_ratios = []
 
@@ -133,7 +133,7 @@ def plot_gsm_data(connections_folder, fig_file_path, title):
         xlabel='Time of Day',
         ylim=(0,0.5),
         yticks=yticks_ratios,
-        yticklabels=['{:.0%}'.format(my_yticklabel).replace('%', r'\%') for my_yticklabel in yticks_ratios],
+        yticklabels=['{:.0%}'.format(my_yticklabel) for my_yticklabel in yticks_ratios],
         ylabel='IE Ratio')
     
     total_ratios = []

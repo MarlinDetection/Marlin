@@ -1,9 +1,7 @@
 # Import libraries
-from datetime import datetime
 from macros import *
 import nest_asyncio
 import numpy as np
-import os
 import pyshark
 import pandas as pd
 import sys

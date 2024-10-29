@@ -1,7 +1,6 @@
 # Import libraries
 import pyshark
 import pandas as pd
-import os
 import nest_asyncio
 import numpy as np
 from macros import *

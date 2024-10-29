@@ -1,25 +1,25 @@
-# Marlin Analysis Tool
+# Marlin Code
 
-Our tool enables downlink traffic analysis using USRP B210 software-defined radios. This program takes as input a text file of EARFCN values to analyze and automatically searches for your radios using the `uhd_find_devices` command. At this point, the program creates a radio queue and a frequency queue.
+This guide assumes that you have Python 3 installed on your system. If you do not, please follow this [guide](https://realpython.com/installing-python/).
 
-During program execution, the marlin script cycles through frequencies using as many available radios as it detects. By default, the script spends one minute on each frequency before cycling to the next. After monitoring each frequency, the code adds the resulting pcap file to a queue of capture files that it analyzes. All information is logged to the terminal and to a log file.
+### Installation
+
+We provide a `requirements.txt` file that can be used with a local Python virtual environment to install dependencies for all of our scripts.
 
 ```bash
-python3 marlin.py
-usage: Marlin [-h] [-l Location] [-f filename.txt] [-c filename.ini] [-a filename.ini] [-s path]
-
-IMSI-Catcher detector based on downlink traffic behavior.
-
-options:
-  -h, --help            show this help message and exit
-  -l Location, --location Location
-                        Specify a location in plain text (e.g., "Washington, D.C.").
-  -f filename.txt, --freq filename.txt
-                        Specify a frequency list file.
-  -c filename.ini, --config filename.ini
-                        Specify a configuration file.
-  -a filename.ini, --add filename.ini
-                        Create a default configuration file.
-  -s path, --sniffer path
-                        Path to sniffer executable.
+python3 -m venv ./venv
+source ./venv/bin/activate
+pip3 install -r requirements.txt
 ```
+
+To reactivate the virtual environment in future sessions, run the `source ./venv/bin/activate` command from this directory.
+
+### Analysis
+
+All of our scripts for analyzing cellular network traffic are found in this directory. All code can be run using a Python 3 environment and does not require specialized hardware.
+
+### Marlin Tool
+
+This directory contains the `marlin.py` analysis tool that allows you to analyze cellular traffic in real time. This tool has specialized hardware requirements, namely a software-defined radio attached to the host machine.
+
+You need at least one software-defined radio (SDR) supported by srsRAN to run LTE analysis and at least one SDR support by gr-gsm to run GSM analysis. We confirmed that our LTE code works with the [Ettus Research USRP B210](https://www.ettus.com/all-products/ub210-kit/).

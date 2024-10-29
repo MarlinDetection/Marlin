@@ -3,7 +3,6 @@ FROM ubuntu:jammy
 
 # Standard environment variables
 ENV DEBIAN_FRONTEND=noninteractive
-# ENV TZ=America/New_York
 
 # Download dependencies
 RUN apt-get update
@@ -18,4 +17,4 @@ WORKDIR /Marlin/code
 RUN python3 -m venv ./venv
 RUN /bin/bash -c 'source ./venv/bin/activate'
 RUN	python3 -m pip install -r requirements.txt
-WORKDIR /Marlin/analysis
+WORKDIR /Marlin/code/analysis

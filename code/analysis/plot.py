@@ -1,24 +1,29 @@
 # Visualize Cellular Network Captures
 
 # Import all prerequisite packages
-import pandas as pd
+from datetime import datetime
 import matplotlib
 import matplotlib.pyplot as plt
-from datetime import datetime
 import numpy as np
+import pandas as pd
 from pathlib import Path
+import sys
 
 # Function to plot capture results on a 24 hour scale
 def plot_data(connections_file, file_path):
 
-    # Message Dict
-    message_ratios_dict = {"Identity Request": [],
-                           "Attach Reject": [],
-                           "TAU Reject": [],
-                           "Detach Request": [],
-                           "Attach Reject": [],
-                           "Service Reject": []}
-    # Message color settings
+    # Message dictionary to keep track of individual message types
+    message_ratios_dict = {'Identity Request':              [],
+                          'Authentication Reject':          [],
+                          'Location Updating Reject':       [],
+                          'CM Service Reject':              [],
+                          'Attach Reject':                  [],
+                          'Detach Request':                 [],
+                          'RAU Reject':                     [],
+                          'Authentication Cipher Reject':   [],
+                          'Service Reject':                 [],
+                          'TAU Reject':                     []}
+    # Message color dictionary to assign a color to each message type
     message_color_dict = {'Identity Request':               '#E9C46A',
                           'Authentication Reject':          '#BB2532',
                           'Location Updating Reject':       '#21A179',
@@ -38,15 +43,15 @@ def plot_data(connections_file, file_path):
     plt.grid(visible=True,
              linewidth=0.5,
              alpha=0.9)
-    xticks_minutes = np.arange(840, 961, 30)
-    yticks_ratios = np.arange(0.1, 0.51, 0.1)
-    ax.set(xlim=(840, 960),
+    xticks_minutes = np.arange(0, 1441, 120)
+    yticks_ratios = np.arange(0.1, 1.01, 0.1)
+    ax.set(xlim=(0, 1440),
         xticks=xticks_minutes,
         xticklabels=[pd.to_datetime(tm, unit='m').strftime("%H:%M") for tm in xticks_minutes],
         xlabel='Time of Day',
-        ylim=(0,0.5),
+        ylim=(0, 1.0),
         yticks=yticks_ratios,
-        yticklabels=["{:.0%}".format(my_yticklabel).replace('%', r'\%') for my_yticklabel in yticks_ratios],
+        yticklabels=["{:.0%}".format(my_yticklabel) for my_yticklabel in yticks_ratios],
         ylabel='IE Ratio')
 
     # Ensure file is in pcap format
@@ -91,7 +96,12 @@ def plot_data(connections_file, file_path):
     plt.legend()
     plt.savefig(file_path, bbox_inches='tight')
 
-# Plot Event LTE Data
-data_directory = Path("../data/")
-plot_data(str(data_directory / 'lte/event/event.pkl'), 'event.pdf')
-plot_data(str(data_directory / "lte/event/provider-2.pkl"), 'event-benchmark.pdf')
+# Plot cellular Data
+# Main Function
+def main(arguments):
+
+    # Pull out connections from LTE packet captures
+    plot_data(sys.argv[1], 'plot.pdf')
+
+# Call main function
+if __name__ == '__main__': main(sys.argv)

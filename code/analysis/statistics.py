@@ -11,7 +11,7 @@ from pathlib import Path
 from scipy import stats
 
 # Top-level directory for your data
-data_directory = Path('../data/statistics')
+data_directory = Path('../../data/statistics')
 
 # Calculate data
 directory_dict ={
@@ -89,7 +89,7 @@ ax.set(xlabel='',
                  'Court Location\nBenchmark', 'Court Event'],
     ylim=(0,0.51),
     yticks=yticks_ratios,
-    yticklabels=['{:.0%}'.format(my_yticklabel).replace('%', r'\%') for my_yticklabel in yticks_ratios],
+    yticklabels=['{:.0%}'.format(my_yticklabel) for my_yticklabel in yticks_ratios],
     ylabel='IMSI Exposure Ratio')
 
 # Create plots for each dataset

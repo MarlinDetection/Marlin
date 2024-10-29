@@ -1,27 +1,15 @@
 # Detecting IMSI-Catchers by Characterizing Identity Exposing Messages in Cellular Traffic
 
-We provide our code using Docker containers and a Python virtual environment to minimize platform dependency issues. To run our containers, you must have [Python3](https://www.python.org/downloads/) and [Docker](https://docs.docker.com/engine/install/) installed on your machine.
+This repository accompanies the publication *Detecting IMSI-Catchers by Characterizing Identity Exposing Messages in Cellular Traffic*. In this work, we introduce a new method for detecting rogue cellular base stations known as "IMSI-Catchers".
 
-Additionally, you need at least one software-defined radio (SDR) supported by srsRAN to run LTE analysis and at least one SDR support by gr-gsm to run GSM analysis. We confirmed that our LTE code works with the [Ettus Research USRP B210](https://www.ettus.com/all-products/ub210-kit/).
+### Overview
 
-## Docker
+Our work first seeks to identify all messages that a (GSM/UMTS/LTE) base station can use to force a device to transmit its IMSI according to cellular standards, ultimately producing 53 unique "IMSI-exposing messages". We then create a new detection metric called the "IMSI-exposing ratio" that calculates the ratio of connections including at least one IMSI-exposing messages to the total number of connections in a small time window. The theory behind this metric is that IMSI-Catchers *must* transmit one of these messages per device to operate, meanwhile legitimate base stations do not need to perform this operation. Furthermore, legitimate base stations will actively minimize the number of IMSI-exposing messages to protect the identifiers associated with the user.
 
-All Dockerfiles are located under the `./docker` directory, which includes subdirectories for each cellular program. You must build each image using `sudo docker build -t .` from within those subdirectories. Since we are using USB devices, we must pass through the `/dev` directory when creating each container. We share further run instructions in a README within `./docker`.
+### Repository
 
-## Analysis
+Our repository is organized as follows:
 
-Our program writes packet captures in `.pcap` format, which can be viewed directly in [Wireshark](https://www.wireshark.org/). For detailed traffic density analysis, we provide a jupyter notebook called `marlin.ipynb` under `./analysis`. To ensure a working Python environment, we provide a `requirements.txt` file which can be used after creating a virtual environment for this project. To create a virtual environment within this directory and install the necessary packages, follow these instructions:
-
-```bash
-python3 -m venv ./venv
-source ./venv/bin/activate
-pip3 install -r requirements.txt
-```
-
-## Code
-
-After activating the virtual environment, you can run our main script using `python3 marlin.py`.
-
-## Data
-
-This directory contains the data we collected while evaluating our approach to detecting IMSI-Catchers.
+* `code` contains scripts for collecting new data, reproducing the results found in our paper, and analyzing new captures.
+* `data`: This directory contains the data we collected while evaluating our approach to detecting IMSI-Catchers. All captures can be analyzed using the programs provided in the `code/analysis` directory.
+* `docker` provides two Dockerfiles to ease installation. The first, `marlin`, runs the Marlin detector using your own software-defined radios. The second, `marlin-data`, allows you to reproduce the results in our paper and plot new data without hardware requirements. To run our containers, you must have [docker](https://docs.docker.com/engine/install/) installed on your machine.

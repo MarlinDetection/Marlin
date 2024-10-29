@@ -1,9 +1,8 @@
-code/locations
-code/sniffers
 code/venv
-code/analysis
 code/*.pcap
-analysis/*.pdf
+code/analysis/*.pdf
+code/marlin/locations
+code/marlin/sniffers
 *__pycache__
 *.ini
 *.ipynb_checkpoints

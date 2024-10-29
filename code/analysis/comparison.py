@@ -7,7 +7,7 @@ import pandas as pd
 from pathlib import Path
 
 # Read in data
-data_directory = Path('../data/lte')
+data_directory = Path('../../data/lte')
 dlprobe_df = pd.read_pickle(data_directory / 'comparison/dlprobe.pkl')
 ltesniffer_df = pd.read_pickle(data_directory / 'comparison/ltesniffer.pkl')
 
