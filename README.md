@@ -11,5 +11,5 @@ Our work first seeks to identify all messages that a (GSM/UMTS/LTE) base station
 Our repository is organized as follows:
 
 * `code` contains scripts for collecting new data, reproducing the results found in our paper, and analyzing new captures.
-* `data`: This directory contains the data we collected while evaluating our approach to detecting IMSI-Catchers. All captures can be analyzed using the programs provided in the `code/analysis` directory.
+* `data` This directory contains the data we collected while evaluating our approach to detecting IMSI-Catchers. All captures can be analyzed using the programs provided in the `code/analysis` directory.
 * `docker` provides two Dockerfiles to ease installation. The first, `marlin`, runs the Marlin detector using your own software-defined radios. The second, `marlin-data`, allows you to reproduce the results in our paper and plot new data without hardware requirements. To run our containers, you must have [docker](https://docs.docker.com/engine/install/) installed on your machine.

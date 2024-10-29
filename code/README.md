@@ -22,4 +22,4 @@ All of our scripts for analyzing cellular network traffic are found in this dire
 
 This directory contains the `marlin.py` analysis tool that allows you to analyze cellular traffic in real time. This tool has specialized hardware requirements, namely a software-defined radio attached to the host machine.
 
-You need at least one software-defined radio (SDR) supported by srsRAN to run LTE analysis and at least one SDR support by gr-gsm to run GSM analysis. We confirmed that our LTE code works with the [Ettus Research USRP B210](https://www.ettus.com/all-products/ub210-kit/).
+You need at least one software-defined radio (SDR) supported by srsRAN to run LTE analysis and at least one SDR supported by gr-gsm to run GSM analysis. We confirmed that our LTE code works with the [Ettus Research USRP B210](https://www.ettus.com/all-products/ub210-kit/).

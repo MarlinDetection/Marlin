@@ -2,18 +2,6 @@
 
 This directory contains scripts to analyze our existing captures and analyze new `*.pcap` captures. There are no hardware requirements for any script in this directory.
 
-## Installation
-
-To ensure a working Python environment, we provide a `requirements.txt` file which can be used after creating a virtual environment for this project. To create a virtual environment within this directory and install the necessary packages, follow these instructions:
-
-```bash
-python3 -m venv ./venv
-source ./venv/bin/activate
-pip3 install -r requirements.txt
-```
-
-To reactivate the virtual environment in future sessions, run `source ./venv/bin/activate` from this directory.
-
 ## Reproducibility
 
 Our scripts regenerate the plots and statistics found in our paper. Run any reproducibilty script using the command `python3 <script-name.py>`.
