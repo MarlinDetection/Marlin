@@ -5,8 +5,8 @@ FROM ubuntu:jammy
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Download dependencies
-RUN apt-get update
-RUN apt-get install -y python3.10-venv python3-pip git python3-dev tshark
+RUN apt update
+RUN apt install -y python3.10-venv python3-pip git python3-dev tshark
 
 # Download Marlin code
 WORKDIR /

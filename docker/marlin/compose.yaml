@@ -1,0 +1,12 @@
+services:
+  lte:
+    image: marlin
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+    working_dir: /Marlin/code/marlin
+    # command:
+    #   - /bin/sh
+    #   - -c
+    #   - |
+    #     timeout -s2 24h ./LTESniffer -A 2 -W 5 -f 763e6 -C -m 0 -a "num_recv_frames=512" 
+    #     mv ltesniffer_dl_mode.pcap $(date +%Y-%m-%d).pcap

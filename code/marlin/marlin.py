@@ -59,7 +59,6 @@ class Marlin:
         self.radio_queue = self.load_radios()
         self.frequency_queue = self.load_frequencies(args.freq)
         self.capture_queue = queue.Queue()
-        # self.capture_queue.put(('attack-merged.pcap', '512'))
 
         # Capture interrupt signal for graceful exit
         signal.signal(signal.SIGINT, self.handle_signal)
@@ -237,7 +236,9 @@ class Marlin:
         try:
             packets = pyshark.FileCapture(file_name, custom_parameters=my_parameters, display_filter=all_lte)
         except:
-            self.logger.warning(f'EARFCN {earfcn}: tshark failed to read capture file.')
+            self.logger.warning(f'EARFCN {earfcn}: repairing PCAP file.')
+            os.system(f'pcapfix {file_name} -o {file_name}')
+            self.capture_queue.put((file_name, earfcn))
             return
         
         # Track total connections and IMSI-exposed connections

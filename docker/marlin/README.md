@@ -6,7 +6,7 @@ Please note that building this image may take several minutes to build due to th
 # Build the container
 docker build -t marlin .
 # Start and attach to a container
-docker run -it --device /dev/bus/usb/:/dev/bus/usb/ marlin
+docker run -it --privileged --device /dev/bus/usb/:/dev/bus/usb/ marlin
 ```
 
 From within the container, you can access our main script directly.

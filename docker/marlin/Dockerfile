@@ -1,7 +1,6 @@
-#
-FROM ubuntu:jammy
+FROM ubuntu:focal
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/New_York
 ENV USB_GROUP=usbusers
 ENV USB_GID=10001
@@ -47,7 +46,7 @@ RUN cd $HOME
 WORKDIR /
 
 # Download Marlin dependencies
-RUN apt-get install -y python3-pip python3.10-venv
+RUN apt -y install python3-venv python3-pip pcapfix
 
 # Get Marlin code
 RUN git clone https://github.com/MarlinDetection/Marlin
