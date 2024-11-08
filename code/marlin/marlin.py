@@ -194,7 +194,6 @@ class Marlin:
                     break
                 time_elapsed = time.time() - time_start
             if full_capture and self.running:
-                self.capture_queue.put((str(freq_directory / 'ltesniffer_dl_mode.pcap'), earfcn))
                 self.logger.warning(f"EARFCN {earfcn}: Finished monitoring cell using radio {radio}.")
 
         # Quickly end thread if running flag is set False
@@ -224,6 +223,10 @@ class Marlin:
         # Re-insert radio and frequency into respective queues
         self.radio_queue.put(radio)
         self.frequency_queue.put(earfcn)
+
+        # Add capture to analysis queue if everything was successful
+        if cell_found and full_capture and self.running:
+                self.capture_queue.put((str(freq_directory / 'ltesniffer_dl_mode.pcap'), earfcn))
         return
         
     # Recover connections from LTE pcap capture
