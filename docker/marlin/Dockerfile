@@ -47,6 +47,7 @@ WORKDIR /
 
 # Download Marlin dependencies
 RUN apt -y install python3-venv python3-pip pcapfix
+RUN ls
 
 # Get Marlin code
 RUN git clone https://github.com/MarlinDetection/Marlin

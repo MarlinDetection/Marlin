@@ -1,5 +1,5 @@
 matplotlib==3.7.5
-nest_asyncio==1.6.0
+nest-asyncio==1.6.0
 numpy==1.24.4
 pandas==2.0.3
 pyshark==0.6
