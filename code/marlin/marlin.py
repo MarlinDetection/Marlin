@@ -239,7 +239,9 @@ class Marlin:
         try:
             packets = pyshark.FileCapture(file_name, custom_parameters=my_parameters, display_filter=all_lte)
         except:
-            self.logger.warning(f'EARFCN {earfcn}: repairing PCAP file.')
+            self.logger.warning(f'EARFCN {earfcn}: Repairing PCAP file.')
+            os.system(f'pcapfix {file_name} -o {file_name}')
+            self.capture_queue.put((file_name, earfcn))
             return
         
         # Track total connections and IMSI-exposed connections
