@@ -298,9 +298,11 @@ class Marlin:
             self.logger.warning(f'EARFCN {earfcn}: tshark crashed during capture analysis.')
             return
         # Calculate IMSI-exposure ratio
-        if total_connections:
+        if len(total_connections) > 10:
             imsi_exposure_ratio = int((len(exposed_connections) * 100)/len(total_connections))
             self.logger.warning(f'EARFCN {earfcn}: IMSI-exposing ratio = {imsi_exposure_ratio}%.')
+        elif len(total_connections) > 0:
+            self.logger.warning(f'EARFCN {earfcn}: Detected too few connections.')
         else:
             self.logger.warning(f'EARFCN {earfcn}: Detected no connections.')
         return
