@@ -13,5 +13,5 @@ From within the container, you can access our main script directly.
 
 ```bash
 # From the working directory of the container
-./marlin.py
+./marlin.py -c marlin.ini
 ```

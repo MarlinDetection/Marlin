@@ -2,7 +2,7 @@
 
 Our tool enables downlink traffic analysis using USRP B210 software-defined radios. This program takes as input a text file of EARFCN values to analyze and automatically searches for your radios using the `uhd_find_devices` command. At this point, the program creates a radio queue and a frequency queue.
 
-During program execution, the marlin script cycles through frequencies using as many available radios as it detects. By default, the script spends one minute on each frequency before cycling to the next. After monitoring each frequency, the code adds the resulting pcap file to a queue of capture files that it analyzes. All information is logged to the terminal and to a log file.
+During program execution, the marlin script cycles through frequencies using as many available radios as it detects. By default, the script spends one minute on each frequency before cycling to the next. After monitoring each frequency, the code adds the resulting pcap file to a queue of capture files that it analyzes. All information is logged to the terminal and to a log file. The only required argument is `-c <filename>.ini` as the program expects a configuration file. By default, the configuration file is called `marlin.ini`. 
 
 ```bash
 python3 marlin.py
@@ -23,3 +23,4 @@ options:
   -s path, --sniffer path
                         Path to sniffer executable.
 ```
+Output from the program is sent to console and to a log file which is located in `./locations/<location>/<date>/marlin.log`.
