@@ -239,9 +239,10 @@ class Marlin:
         try:
             packets = pyshark.FileCapture(file_name, custom_parameters=my_parameters, display_filter=all_lte)
         except:
-            self.logger.warning(f'EARFCN {earfcn}: Repairing PCAP file.')
-            os.system(f'pcapfix {file_name} -o {file_name}')
-            self.capture_queue.put((file_name, earfcn))
+            if os.path.exists(file_name):
+                self.logger.warning(f'EARFCN {earfcn}: Repairing PCAP file.')
+                os.system(f'pcapfix {file_name} -o {file_name}')
+                self.capture_queue.put((file_name, earfcn))
             return
         
         # Track total connections and IMSI-exposed connections
@@ -293,9 +294,10 @@ class Marlin:
                         exposed_connections.append(current_rnti)
         except:
             # Attempt to fix the pcap if needed
-            os.system(f'pcapfix {file_name} -o {file_name}')
-            self.capture_queue.put((file_name, earfcn))
-            self.logger.warning(f'EARFCN {earfcn}: tshark crashed during capture analysis.')
+            if os.path.exists(file_name):
+                os.system(f'pcapfix {file_name} -o {file_name}')
+                self.capture_queue.put((file_name, earfcn))
+                self.logger.warning(f'EARFCN {earfcn}: tshark crashed during capture analysis.')
             return
         # Calculate IMSI-exposure ratio
         if len(total_connections) > 10:

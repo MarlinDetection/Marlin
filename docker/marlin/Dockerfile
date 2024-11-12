@@ -31,6 +31,7 @@ RUN apt-get install -y build-essential git cmake libfftw3-dev libmbedtls-dev lib
 
 # Download LTESniffer dependencies
 RUN apt-get install -y libglib2.0-dev libudev-dev libcurl4-gnutls-dev libboost-all-dev qtdeclarative5-dev libqt5charts5-dev 
+RUN ls -a
 
 # Build LTESniffer from source
 RUN git clone https://github.com/SysSec-KAIST/LTESniffer.git
@@ -47,7 +48,6 @@ WORKDIR /
 
 # Download Marlin dependencies
 RUN apt -y install python3-venv python3-pip pcapfix
-RUN ls
 
 # Get Marlin code
 RUN git clone https://github.com/MarlinDetection/Marlin
