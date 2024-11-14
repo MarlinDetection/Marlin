@@ -35,25 +35,6 @@ def plot_data(connections_file, file_path):
                           'Service Reject':                 '#E76F51',
                           'TAU Reject':                     '#2A9D8F'}
 
-    # Pre-plot settings
-    matplotlib.rc("font", size=16)
-    matplotlib.rc("xtick", labelsize=14)
-    matplotlib.rc("ytick", labelsize=14)
-    fig, ax = plt.subplots(figsize=(10,2.5))
-    plt.grid(visible=True,
-             linewidth=0.5,
-             alpha=0.9)
-    xticks_minutes = np.arange(0, 1441, 120)
-    yticks_ratios = np.arange(0.1, 1.01, 0.1)
-    ax.set(xlim=(0, 1440),
-        xticks=xticks_minutes,
-        xticklabels=[pd.to_datetime(tm, unit='m').strftime("%H:%M") for tm in xticks_minutes],
-        xlabel='Time of Day',
-        ylim=(0, 1.0),
-        yticks=yticks_ratios,
-        yticklabels=["{:.0%}".format(my_yticklabel) for my_yticklabel in yticks_ratios],
-        ylabel='IE Ratio')
-
     # Ensure file is in pcap format
     if not connections_file.endswith('.pkl'): return
 
@@ -63,20 +44,45 @@ def plot_data(connections_file, file_path):
     # Iterate through IMSI-exposing messages
     my_df = connections_df.loc[connections_df['IMSI-Exposing Message'] != '']
     bins = []
+    max_ratio = 0
     for exposure in my_df.iterrows():
         epoch = exposure[1]['Timestamp']
         start = float(epoch - (epoch % 60))
         if start not in bins:
-            bins.append(start)
             end = start + 60
             relevant_df = connections_df.loc[(connections_df['Timestamp'] >= start) & (connections_df['Timestamp'] < end)]
-            for message in message_ratios_dict.keys():
-                message_ratios_dict[message].append(len(relevant_df.loc[relevant_df['IMSI-Exposing Message'] == message]) / len(relevant_df))
+            if len(relevant_df) > 10:
+                bins.append(start)
+                for message in message_ratios_dict.keys():
+                    ratio = len(relevant_df.loc[relevant_df['IMSI-Exposing Message'] == message]) / len(relevant_df)
+                    message_ratios_dict[message].append(ratio)
+                    if ratio > max_ratio:
+                        max_ratio = ratio
 
     # Convert epoch bins to minute bins
     for i in range(0,len(bins)):
         dt = datetime.fromtimestamp(bins[i])
         bins[i] = dt.hour * 60 + dt.minute
+    
+    # Pre-plot settings
+    matplotlib.rc("font", size=16)
+    matplotlib.rc("xtick", labelsize=14)
+    matplotlib.rc("ytick", labelsize=14)
+    fig, ax = plt.subplots(figsize=(10,2.5))
+    plt.grid(visible=True,
+             linewidth=0.5,
+             alpha=0.9)
+    xticks_minutes = np.arange(0, 1441, 120)
+    y_lim = max_ratio - (max_ratio % 0.1) + 0.1 
+    yticks_ratios = np.arange(y_lim / 10, y_lim + 0.01, y_lim / 10)
+    ax.set(xlim=(0, 1440),
+        xticks=xticks_minutes,
+        xticklabels=[pd.to_datetime(tm, unit='m').strftime("%H:%M") for tm in xticks_minutes],
+        xlabel='Time of Day',
+        ylim=(0, y_lim),
+        yticks=yticks_ratios,
+        yticklabels=["{:.0%}".format(my_yticklabel) for my_yticklabel in yticks_ratios],
+        ylabel='IE Ratio')
     
     # Scatter plot
     bottom_list = [0] * len(message_ratios_dict['Identity Request'])

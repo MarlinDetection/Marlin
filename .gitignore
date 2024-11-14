@@ -1,6 +1,7 @@
 code/venv
 code/*.pcap
 code/analysis/*.pdf
+code/analysis/output.pkl
 code/marlin/locations
 code/marlin/sniffers
 *__pycache__

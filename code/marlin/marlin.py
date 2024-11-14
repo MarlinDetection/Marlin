@@ -262,7 +262,7 @@ class Marlin:
                 # Get message-agnostic packet information
                 try: current_rnti = packet['mac-lte'].rnti
                 except KeyError:
-                    print(packet_string)
+                    # print(packet_string)
                     continue
 
                 # Convert packet to string
@@ -276,10 +276,10 @@ class Marlin:
                         current_message = 'RAR Message'
                         try: current_rnti = packet['mac-lte'].rar_temporary_crnti
                         except AttributeError:
-                            print(packet_string)
+                            # print(packet_string)
                             continue
                         except KeyError:
-                            print(packet_string)
+                            # print(packet_string)
                             continue
                     else: current_message = 'RRC Connection Setup'
                     
