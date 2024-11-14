@@ -56,6 +56,7 @@ RUN	python3 -m venv ./venv
 RUN /bin/bash -c 'source ./venv/bin/activate'
 RUN	python3 -m pip install -r requirements.txt
 WORKDIR /Marlin/code/marlin
+RUN ./marlin.py -a marlin.ini
 
 # Enable USB passthrough
 RUN apt install -y avahi-daemon avahi-utils dbus
