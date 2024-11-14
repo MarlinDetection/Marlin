@@ -1,12 +1,12 @@
-# Build from Ubuntu 22 image
-FROM ubuntu:jammy
+# Build from Ubuntu 20 image
+FROM ubuntu:focal
 
 # Standard environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Download dependencies
 RUN apt update
-RUN apt install -y python3.10-venv python3-pip git python3-dev tshark
+RUN apt install -y python3-venv python3-pip git python3-dev tshark
 
 # Download Marlin code
 WORKDIR /
