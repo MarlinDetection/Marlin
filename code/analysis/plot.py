@@ -1,13 +1,21 @@
 # Visualize Cellular Network Captures
 
 # Import all prerequisite packages
-from datetime import datetime
+from datetime import datetime, date, time
 import matplotlib
+import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from pathlib import Path
 import sys
+
+# matplotlib settings before plotting data
+def pre_plot_settings():
+
+    # Pre-plot settings
+    matplotlib.rc('font', size=16)
+    matplotlib.rc('xtick', labelsize=14)
+    matplotlib.rc('ytick', labelsize=14)
 
 # Function to plot capture results on a 24 hour scale
 def plot_data(connections_file, file_path):
@@ -48,53 +56,52 @@ def plot_data(connections_file, file_path):
     for exposure in my_df.iterrows():
         epoch = exposure[1]['Timestamp']
         start = float(epoch - (epoch % 60))
-        if start not in bins:
+        cur_date = datetime.fromtimestamp(start)
+        cur_time = time(cur_date.hour, cur_date.minute, cur_date.second)
+        stripped_date = datetime.combine(date(1970, 1, 1), cur_time)
+        if stripped_date not in bins:
             end = start + 60
             relevant_df = connections_df.loc[(connections_df['Timestamp'] >= start) & (connections_df['Timestamp'] < end)]
             if len(relevant_df) > 10:
-                bins.append(start)
+                bins.append(stripped_date)
                 for message in message_ratios_dict.keys():
                     ratio = len(relevant_df.loc[relevant_df['IMSI-Exposing Message'] == message]) / len(relevant_df)
                     message_ratios_dict[message].append(ratio)
                     if ratio > max_ratio:
                         max_ratio = ratio
-
-    # Convert epoch bins to minute bins
-    for i in range(0,len(bins)):
-        dt = datetime.fromtimestamp(bins[i])
-        bins[i] = dt.hour * 60 + dt.minute
     
     # Pre-plot settings
-    matplotlib.rc("font", size=16)
-    matplotlib.rc("xtick", labelsize=14)
-    matplotlib.rc("ytick", labelsize=14)
     fig, ax = plt.subplots(figsize=(10,2.5))
     plt.grid(visible=True,
              linewidth=0.5,
              alpha=0.9)
-    xticks_minutes = np.arange(0, 1441, 120)
-    y_lim = max_ratio - (max_ratio % 0.1) + 0.1 
+    
+    # Format x-axis as timestamps and show tick marks at two hour intervals
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    y_lim = max_ratio - (max_ratio % 0.1) + 0.1
     yticks_ratios = np.arange(y_lim / 10, y_lim + 0.01, y_lim / 10)
-    ax.set(xlim=(0, 1440),
-        xticks=xticks_minutes,
-        xticklabels=[pd.to_datetime(tm, unit='m').strftime("%H:%M") for tm in xticks_minutes],
-        xlabel='Time of Day',
+    
+    # Remaining plot settings
+    ax.set(
+        xlabel='Time',
+        xlim=[datetime.strptime('1970-1-1 00:00:00', '%Y-%m-%d %H:%M:%S'), datetime.strptime('1970-1-2 00:00:00', '%Y-%m-%d %H:%M:%S')],
+        ylabel='IE Ratio',
         ylim=(0, y_lim),
         yticks=yticks_ratios,
         yticklabels=["{:.0%}".format(my_yticklabel) for my_yticklabel in yticks_ratios],
-        ylabel='IE Ratio')
+    )
     
-    # Scatter plot
+    # Bar plot
     bottom_list = [0] * len(message_ratios_dict['Identity Request'])
     for message in message_ratios_dict.keys():
         if not all(v == 0 for v in message_ratios_dict[message]):
             plt.bar(bins,
                     message_ratios_dict[message],
-                    width=1,
+                    width=0.002,
                     label=message,
                     bottom=bottom_list,
                     color=message_color_dict[message],
-                    linewidth=0.4,
                     edgecolor="black",
                     zorder = 3)
             bottom_list = [sum(x) for x in zip(message_ratios_dict[message], bottom_list)]
@@ -102,11 +109,11 @@ def plot_data(connections_file, file_path):
     plt.legend()
     plt.savefig(file_path, bbox_inches='tight')
 
-# Plot cellular Data
 # Main Function
 def main(arguments):
-
-    # Pull out connections from LTE packet captures
+    # matplotlib settings
+    pre_plot_settings()
+    # Plot capture
     plot_data(sys.argv[1], 'plot.pdf')
 
 # Call main function

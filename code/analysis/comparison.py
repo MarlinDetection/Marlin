@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from pathlib import Path
+import pytz
 
 # matplotlib settings before plotting data
 def pre_plot_settings():
@@ -46,7 +47,7 @@ def plot_capture(input_df, color, label, offset):
         # Strip date from epoch object
         epoch = exposure[1]['Timestamp']
         start = float(epoch - (epoch % 60))
-        cur_date = datetime.fromtimestamp(start)
+        cur_date = target_timezone.localize(datetime.fromtimestamp(start))
         cur_time = time(cur_date.hour, cur_date.minute, cur_date.second)
         stripped_date = datetime.combine(date(1970, 1, 1), cur_time)
 
@@ -79,6 +80,9 @@ def post_plot_settings():
     fig_file_path = 'comparison.pdf'
     plt.savefig(fig_file_path, bbox_inches='tight')
     print(f'Saved file {fig_file_path}.')
+
+# Ensure Eastern Standard time zone
+target_timezone = pytz.timezone('America/New_York')
 
 # Read in data
 data_directory = Path('../../data/lte')

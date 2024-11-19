@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from pathlib import Path
+import pytz
 
 # Function to plot capture results on a 24 hour scale
 def plot_data(connections_file, file_path):
@@ -41,7 +42,7 @@ def plot_data(connections_file, file_path):
     for exposure in my_df.iterrows():
         epoch = exposure[1]['Timestamp']
         start = float(epoch - (epoch % 60))
-        cur_date = datetime.fromtimestamp(start)
+        cur_date = target_timezone.localize(datetime.fromtimestamp(start))
         cur_time = time(cur_date.hour, cur_date.minute, cur_date.second)
         stripped_date = datetime.combine(date(1970, 1, 1), cur_time)
         if stripped_date not in bins:
@@ -64,7 +65,6 @@ def plot_data(connections_file, file_path):
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
     ax.xaxis.set_major_locator(mdates.MinuteLocator(interval=30))
 
-    # xticks_minutes = np.arange(840, 961, 30)
     yticks_ratios = np.arange(0.1, 0.51, 0.1)
     ax.set(
         xlabel='Time of Day',
@@ -90,6 +90,9 @@ def plot_data(connections_file, file_path):
 
     plt.legend()
     plt.savefig(file_path, bbox_inches='tight')
+
+# Ensure Eastern Standard time zone
+target_timezone = pytz.timezone('America/New_York')
 
 # Plot Event LTE Data
 data_directory = Path("../../data/")
